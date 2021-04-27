@@ -1,5 +1,7 @@
 syntax on
-filetype plugin indent on
+filetype on
+filetype plugin on
+filetype indent on
 
 set exrc 
 set guicursor=
@@ -25,8 +27,8 @@ set colorcolumn=120
 set clipboard+=unnamedplus
 set updatetime=300
 set runtimepath^=~/.vim/bundle/bbye
+set autoindent
 
-highlight ColorColumn ctermbg=0 guibg=lighgrey
 
 call plug#begin('~/.vim/plugged')
 Plug 'hecal3/vim-leader-guide'
@@ -103,6 +105,13 @@ Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 Plug 'dart-lang/dart-vim-plugin'
 Plug 'thosakwe/vim-flutter'
 
+"javascript
+Plug 'pangloss/vim-javascript'
+Plug 'leafgarland/typescript-vim'
+Plug 'peitalin/vim-jsx-typescript'
+Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
+Plug 'jparise/vim-graphql'
+
 call plug#end()
 
 " Leader key <SPACE>
@@ -112,8 +121,8 @@ nnoremap <Space> <Nop>
 " Leader guide configuration.
 let g:lmap =  {}
 call leaderGuide#register_prefix_descriptions("<Space>", "g:lmap")
-nnoremap <silent> <leader> :<c-u>LeaderGuide '<Space>'<CR>
-vnoremap <silent> <leader> :<c-u>LeaderGuideVisual '<Space>'<CR>
+"nnoremap <silent> <leader> :<c-u>LeaderGuide '<Space>'<CR>
+"vnoremap <silent> <leader> :<c-u>LeaderGuideVisual '<Space>'<CR>
 
 nnoremap <Leader>q :Bdelete<CR>
 
@@ -132,11 +141,10 @@ nnoremap tj :tabprev<CR>
 nnoremap tl :tablast<CR>
 nnoremap tn :tabnew<CR>
 
-
+nnoremap <Tab> :bnext<CR>
+nnoremap <S-Tab> :bprevious<CR>
 " buffers
 nnoremap bl :ls<CR>
-nnoremap bk :bnext<CR>
-nnoremap bj :bprevious<CR>
 nnoremap bq :bp <BAR> bd #<CR>
 nnoremap bn :enew<CR>
 
@@ -165,10 +173,10 @@ nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 
 " Using lua functions
-nnoremap <leader>ff <cmd>lua require('telescope.builtin').find_files()<cr>
-nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<cr>
-nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers()<cr>
-nnoremap <leader>fh <cmd>lua require('telescope.builtin').help_tags()<cr>
+"nnoremap <leader>ff <cmd>lua require('telescope.builtin').find_files()<cr>
+"nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<cr>
+"nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers()<cr>
+"nnoremap <leader>fh <cmd>lua require('telescope.builtin').help_tags()<cr>
 
 map p <Plug>(miniyank-autoput)
 map P <Plug>(miniyank-autoPut)
@@ -184,6 +192,7 @@ nmap <leader>s <Plug>(easymotion-s2)
 
 " Coc extensions
 let g:coc_global_extensions = [
+    \ 'coc-tsserver',
     \ 'coc-snippets',
     \ 'coc-css', 
     \ 'coc-html',
@@ -195,6 +204,14 @@ let g:coc_global_extensions = [
 
 nnoremap <silent><leader>pcd :call PhpCsFixerFixDirectory()<CR>
 nnoremap <silent><leader>pcf :call PhpCsFixerFixFile()<CR>
+
+if isdirectory('./node_modules') && isdirectory('./node_modules/prettier')
+  let g:coc_global_extensions += ['coc-prettier']
+endif
+
+if isdirectory('./node_modules') && isdirectory('./node_modules/eslint')
+  let g:coc_global_extensions += ['coc-eslint']
+endif
 
 autocmd BufEnter * call ncm2#enable_for_buffer()
 set completeopt=noinsert,menuone,noselect
@@ -251,20 +268,23 @@ autocmd BufEnter * call ncm2#enable_for_buffer()
 set completeopt=noinsert,menuone,noselect
 
 "nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gr <Plug>(coc-references)
 
 function! IPhpInsertUse()
     call PhpInsertUse()
     call feedkeys('a',  'n')
 endfunction
-autocmd FileType php inoremap <Leader>u <Esc>:call IPhpInsertUse()<CR>
-autocmd FileType php noremap <Leader>u :call PhpInsertUse()<CR>
+autocmd FileType php inoremap <Leader>pu <Esc>:call IPhpInsertUse()<CR>
+autocmd FileType php noremap <Leader>pu :call PhpInsertUse()<CR>
 
 function! IPhpExpandClass()
     call PhpExpandClass()
     call feedkeys('a', 'n')
 endfunction
-autocmd FileType php inoremap <Leader>e <Esc>:call IPhpExpandClass()<CR>
-autocmd FileType php noremap <Leader>e :call PhpExpandClass()<CR>
+autocmd FileType php inoremap <Leader>o <Esc>:call IPhpExpandClass()<CR>
+autocmd FileType php noremap <Leader>o :call PhpExpandClass()<CR>
 
 let g:coc_user_config = {}
 let g:coc_user_config['coc.preferences.jumpCommand'] = ':SplitIfNotOpen4COC'
@@ -299,7 +319,7 @@ inoremap <expr> <c-j> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <c-k> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
 "" When pressing CTRL+u on a suggestion, it will expand with parameters.
-noremap <silent> <expr> <c-u> ncm2_ultisnips#expand_or("\<CR>", 'n')
+"noremap <silent> <expr> <c-u> ncm2_ultisnips#expand_or("\<CR>", 'n')
 
 "" Tab and Shift-Tab will cycle thorough parameters.
 let g:UltiSnipsJumpForwardTrigger="<tab>"
@@ -321,4 +341,17 @@ let g:lmap.k = {
       \'t': ['call phpactor#Transform()', 'Transform/Complete'],
       \'u': ['call phpactor#UseAdd()', 'UseAdd'],
       \}
+
+" Some of these key choices were arbitrary;
+" it's just an example.
+nnoremap <leader>fa :FlutterRun<cr>
+nnoremap <leader>fq :FlutterQuit<cr>
+nnoremap <leader>fr :FlutterHotReload<cr>
+nnoremap <leader>fR :FlutterHotRestart<cr>
+nnoremap <leader>fD :FlutterVisualDebug<cr>
+map <leader>h :set ft=html<CR> and map <leader>p :set ft=php<CR>
+
+autocmd BufEnter *.{js,jsx,ts,tsx} :syntax sync fromstart
+autocmd BufLeave *.{js,jsx,ts,tsx} :syntax sync clear
+
 
