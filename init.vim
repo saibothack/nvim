@@ -32,6 +32,7 @@ set autoindent
 
 call plug#begin('~/.vim/plugged')
 Plug 'hecal3/vim-leader-guide'
+Plug 'morhetz/gruvbox'
 
 " typing
 Plug 'jiangmiao/auto-pairs'
@@ -110,6 +111,8 @@ Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
 
 call plug#end()
+
+colorscheme gruvbox
 
 " Leader key <SPACE>
 let mapleader=" "
