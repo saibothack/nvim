@@ -105,6 +105,8 @@ Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 "flutter
 Plug 'dart-lang/dart-vim-plugin'
 Plug 'thosakwe/vim-flutter'
+Plug 'natebosch/vim-lsc'
+Plug 'natebosch/vim-lsc-dart'
 
 "javascript
 Plug 'pangloss/vim-javascript'
@@ -113,6 +115,8 @@ Plug 'mxw/vim-jsx'
 call plug#end()
 
 colorscheme gruvbox
+let g:gruvbox_transparent_bg=1
+autocmd VimEnter * hi Normal ctermbg=none
 
 " Leader key <SPACE>
 let mapleader=" "
@@ -267,9 +271,10 @@ autocmd BufEnter * call ncm2#enable_for_buffer()
 " IMPORTANT: :help Ncm2PopupOpen for more information
 set completeopt=noinsert,menuone,noselect
 
-"nmap <silent> gd <Plug>(coc-definition)
+"nman <silent> gd <Plug>(coc-definition)
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
 function! IPhpInsertUse()
