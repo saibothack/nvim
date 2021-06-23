@@ -31,8 +31,14 @@ set autoindent
 
 
 call plug#begin('~/.vim/plugged')
+
 Plug 'hecal3/vim-leader-guide'
 Plug 'morhetz/gruvbox'
+Plug 'jwalton512/vim-blade'
+Plug 'wincent/ferret'
+
+"vue
+Plug 'leafOfTree/vim-vue-plugin'
 
 " typing
 Plug 'jiangmiao/auto-pairs'
@@ -46,6 +52,13 @@ Plug 'tpope/vim-abolish'
 Plug 'arnaud-lb/vim-php-namespace'
 
 "php
+Plug 'phpactor/phpactor' ,  {'do': 'composer install', 'for': 'php'}
+Plug 'ncm2/ncm2'
+Plug 'ncm2/ncm2-ultisnips'
+Plug 'roxma/nvim-yarp'
+Plug 'phpactor/ncm2-phpactor'
+Plug 'SirVer/ultisnips'
+
 Plug 'StanAngeloff/php.vim'
 Plug 'stephpy/vim-php-cs-fixer', {'for': 'php'}
 
@@ -55,15 +68,8 @@ Plug 'tpope/vim-projectionist'        "|
 Plug 'noahfrederick/vim-composer'     "|
 Plug 'noahfrederick/vim-laravel'
 
-" Include Phpactor
-Plug 'phpactor/phpactor' ,  {'do': 'composer install', 'for': 'php'}
-Plug 'ncm2/ncm2-ultisnips'
-Plug 'SirVer/ultisnips'
 
 " Require ncm2 and this plugin
-Plug 'ncm2/ncm2'
-Plug 'roxma/nvim-yarp'
-Plug 'phpactor/ncm2-phpactor'
 Plug 'ncm2/ncm2-bufword'
 Plug 'ncm2/ncm2-path'
 
@@ -114,19 +120,18 @@ Plug 'mxw/vim-jsx'
 
 call plug#end()
 
+
 colorscheme gruvbox
+
 let g:gruvbox_transparent_bg=1
 autocmd VimEnter * hi Normal ctermbg=none
 
 " Leader key <SPACE>
-let mapleader=" "
+let mapleader = " "
 nnoremap <Space> <Nop>
 
 " Leader guide configuration.
 let g:lmap =  {}
-call leaderGuide#register_prefix_descriptions("<Space>", "g:lmap")
-"nnoremap <silent> <leader> :<c-u>LeaderGuide '<Space>'<CR>
-"vnoremap <silent> <leader> :<c-u>LeaderGuideVisual '<Space>'<CR>
 
 nnoremap <Leader>q :Bdelete<CR>
 
@@ -144,9 +149,9 @@ nnoremap tk :tabnext<CR>
 nnoremap tj :tabprev<CR>
 nnoremap tl :tablast<CR>
 nnoremap tn :tabnew<CR>
-
 nnoremap <Tab> :bnext<CR>
 nnoremap <S-Tab> :bprevious<CR>
+
 " buffers
 nnoremap bl :ls<CR>
 nnoremap bq :bp <BAR> bd #<CR>
@@ -168,6 +173,7 @@ map <c-p> :Files<CR>
 " un-highlight when esc is pressed
 map <silent><esc> :noh<cr><Paste>
 
+map <leader>q :bp <BAR> bd #<CR>
 map <leader>w :w<CR>
 
 " Find files using Telescope command-line sugar.
@@ -205,6 +211,20 @@ let g:coc_global_extensions = [
     \ 'coc-vetur',
     \ 'coc-flutter',
     \]
+
+let g:vim_vue_plugin_config = { 
+      \'syntax': {
+      \   'template': ['html'],
+      \   'script': ['javascript'],
+      \   'style': ['css'],
+      \},
+      \'full_syntax': [],
+      \'initial_indent': [],
+      \'attribute': 0,
+      \'keyword': 0,
+      \'foldexpr': 0,
+      \'debug': 0,
+      \}
 
 nnoremap <silent><leader>pcd :call PhpCsFixerFixDirectory()<CR>
 nnoremap <silent><leader>pcf :call PhpCsFixerFixFile()<CR>
@@ -257,8 +277,6 @@ let g:lightline = {
 let g:project_use_nerdtree = 1
 call project#rc("/home/garenas/Developer")
 
-"web
-
 "movil
 call project#rc()
 
@@ -288,14 +306,15 @@ function! IPhpExpandClass()
     call PhpExpandClass()
     call feedkeys('a', 'n')
 endfunction
+
 autocmd FileType php inoremap <Leader>o <Esc>:call IPhpExpandClass()<CR>
 autocmd FileType php noremap <Leader>o :call PhpExpandClass()<CR>
 
 let g:coc_user_config = {}
 let g:coc_user_config['coc.preferences.jumpCommand'] = ':SplitIfNotOpen4COC'
 
-
 autocmd BufWritePost *.php silent! call PhpCsFixerFixFile()
+
 let g:node_client_debug = 1
 
 nnoremap <leader>a :Rg<space>
@@ -309,7 +328,7 @@ autocmd VimEnter * command! -nargs=* Rg
   \   <bang>0)
 
 "" Set the PHP bin to an additional installation that has no XDEBUG installed
-let g:phpactorPhpBin = '/usr/local/Cellar/php/7.2.11/bin/php'
+let g:phpactorPhpBin = '/usr/local/bin/php'
 
 "" Make ncm2 work automatically
 autocmd BufEnter * call ncm2#enable_for_buffer()
@@ -359,4 +378,7 @@ map <leader>h :set ft=html<CR> and map <leader>p :set ft=php<CR>
 autocmd BufEnter *.{js,jsx,ts,tsx} :syntax sync fromstart
 autocmd BufLeave *.{js,jsx,ts,tsx} :syntax sync clear
 
+let g:vim_vue_plugin_load_full_syntax = 1
+let g:vim_vue_plugin_has_init_indent = 1
+let g:vim_vue_plugin_highlight_vue_attr= 1
 
