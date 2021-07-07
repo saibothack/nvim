@@ -120,7 +120,6 @@ Plug 'mxw/vim-jsx'
 
 call plug#end()
 
-
 colorscheme gruvbox
 
 let g:gruvbox_transparent_bg=1
@@ -132,6 +131,9 @@ nnoremap <Space> <Nop>
 
 " Leader guide configuration.
 let g:lmap =  {}
+call leaderGuide#register_prefix_descriptions("<Space>", "g:lmap")
+nnoremap <silent> <leader> :<c-u>LeaderGuide '<Space>'<CR>
+vnoremap <silent> <leader> :<c-u>LeaderGuideVisual '<Space>'<CR>
 
 nnoremap <Leader>q :Bdelete<CR>
 
