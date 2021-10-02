@@ -108,6 +108,8 @@ Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 
+Plug 'mattn/emmet-vim'
+
 "flutter
 Plug 'dart-lang/dart-vim-plugin'
 Plug 'thosakwe/vim-flutter'
